@@ -1,0 +1,39 @@
+version: "3.7"
+
+networks:
+    laravel:
+
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+            dockerfile: docker/nginx/nginx.Dockerfile
+        ports:
+            - "8089:80"
+        volumes:
+            - "./:/var/www/html"
+        depends_on:
+            - php
+        networks:
+            - laravel
+
+    php:
+        volumes:
+            - "./:/var/www/html"
+        build:
+            context: .
+            dockerfile: docker/php/php.Dockerfile
+        container_name: php
+        networks:
+            - laravel
+
+    cli:
+        build:
+            context: .
+            dockerfile: docker/cli/cli.Dockerfile
+        container_name: cli
+        volumes:
+            - "./:/var/www/html"
+        networks:
+            - laravel

@@ -37,3 +37,16 @@ services:
             - "./:/var/www/html"
         networks:
             - laravel
+
+    database:
+        container_name: database
+        image: mariadb:latest
+        volumes:
+            - "./docker/database/data:/var/lib/mysql"
+        environment:
+            MARIADB_DATABASE: laravel
+            MARIADB_USER: laravel
+            MARIADB_PASSWORD: secret
+            MARIADB_ROOT_PASSWORD: secret
+        networks:
+            - laravel

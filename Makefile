@@ -1,21 +1,33 @@
-init: docker-build \
-	docker-down \
-	docker-up \
-	project-composer-install
+init: build \
+	down \
+	up \
+	composer-install \
+	artisan-migrate
 
-docker-build:
+build:
 	make docker-compose COMMAND="build"
-docker-up:
+up:
 	make docker-compose COMMAND="up -d"
-docker-down:
+down:
 	make docker-compose COMMAND="down --remove-orphans"
 docker-compose:
 	docker-compose ${COMMAND}
 
-project-composer-install:
+pint-test:`
+	make docker-compose COMMAND="run --rm cli ./vendor/bin/pint --test"
+pint-fix:
+	make docker-compose COMMAND="run --rm cli ./vendor/bin/pint -v"
+
+php-stan:
+	make docker-compose COMMAND="run --rm cli ./vendor/bin/phpstan analyse --memory-limit=2G --configuration='docker/config/phpstan.neon.dist'"
+
+artisan-migrate:
+	make docker-compose COMMAND="run --rm cli php artisan migrate"
+
+composer-install:
 	make docker-compose COMMAND="run --rm cli composer install"
-project-composer-update:
+composer-update:
 	make docker-compose COMMAND="run --rm cli composer update ${name}"
-project-composer:
+composer:
 	make docker-compose COMMAND="run --rm cli composer ${name}"
 

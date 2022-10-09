@@ -6,7 +6,7 @@ networks:
 
 services:
     nginx:
-        container_name: nginx
+        container_name: ${DOCKER_NETWORK_NAME}-nginx
         build:
             context: .
             dockerfile: docker/nginx/nginx.Dockerfile
@@ -20,27 +20,27 @@ services:
             - laravel
 
     php:
+        container_name: ${DOCKER_NETWORK_NAME}-php
         volumes:
             - "./:/app"
         build:
             context: .
             dockerfile: docker/php/php.Dockerfile
-        container_name: php
         networks:
             - laravel
 
     cli:
+        container_name: ${DOCKER_NETWORK_NAME}-cli
         build:
             context: .
             dockerfile: docker/cli/cli.Dockerfile
-        container_name: cli
         volumes:
             - "./:/app"
         networks:
             - laravel
 
     redis:
-        container_name: redis
+        container_name: ${DOCKER_NETWORK_NAME}-redis
         image: redis:6.2.7-alpine
         ports:
             - "63799:6379"
@@ -48,7 +48,7 @@ services:
             - laravel
 
     database:
-        container_name: database
+        container_name: ${DOCKER_NETWORK_NAME}-database
         image: mariadb:latest
         ports:
             - "33066:3306"

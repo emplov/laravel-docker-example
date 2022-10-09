@@ -2,6 +2,7 @@ version: "3.7"
 
 networks:
     laravel:
+        name: ${DOCKER_NETWORK_NAME}
 
 services:
     nginx:
@@ -10,7 +11,7 @@ services:
             context: .
             dockerfile: docker/nginx/nginx.Dockerfile
         ports:
-            - "${DOCKER_PORT}:80"
+            - "${DOCKER_NGINX_PORT}:80"
         volumes:
             - "./:/app"
         depends_on:
@@ -38,9 +39,19 @@ services:
         networks:
             - laravel
 
+    redis:
+        container_name: redis
+        image: redis:6.2.7-alpine
+        ports:
+            - "63799:6379"
+        networks:
+            - laravel
+
     database:
         container_name: database
         image: mariadb:latest
+        ports:
+            - "33066:3306"
         volumes:
             - "./docker/database/data:/var/lib/mysql"
         environment:

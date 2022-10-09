@@ -2,7 +2,8 @@ FROM php:8.1-fpm
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+    && apt-get install -y \
 		libfreetype6-dev \
 		libjpeg62-turbo-dev \
 		libpng-dev \
@@ -11,4 +12,6 @@ RUN apt-get update && apt-get install -y \
         curl \
         zip \
         unzip \
-    && docker-php-ext-install pdo pdo_mysql zip mbstring
+    && docker-php-ext-install pdo pdo_mysql zip mbstring \
+    && pecl install redis-5.3.7 \
+	&& docker-php-ext-enable redis

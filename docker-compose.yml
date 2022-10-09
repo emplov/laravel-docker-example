@@ -42,16 +42,12 @@ services:
     redis:
         container_name: ${DOCKER_NETWORK_NAME}-redis
         image: redis:6.2.7-alpine
-        ports:
-            - "63799:6379"
         networks:
             - laravel
 
     database:
         container_name: ${DOCKER_NETWORK_NAME}-database
         image: mariadb:latest
-        ports:
-            - "33066:3306"
         volumes:
             - "./docker/database/data:/var/lib/mysql"
         environment:
